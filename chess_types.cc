@@ -37,3 +37,4 @@ export Color oppositeColor(Color c);
 export std::string colorToString(Color c);
 export std::string playerColorToString(Color c);
 export PieceType charToPieceType(char c);
+
