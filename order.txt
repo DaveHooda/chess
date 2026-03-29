@@ -24,6 +24,7 @@ humanplayer.cc
 humanplayer-impl.cc
 strategy.cc
 strategy-impl.cc
+
 level1strategy.cc
 level1strategy-impl.cc
 level2strategy.cc
@@ -32,8 +33,10 @@ level3strategy.cc
 level3strategy-impl.cc
 level4strategy.cc
 level4strategy-impl.cc
+
 computerplayer.cc
 computerplayer-impl.cc
+
 chessgame.cc
 chessgame-impl.cc
 commandinterpreter.cc

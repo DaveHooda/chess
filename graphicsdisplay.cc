@@ -5,6 +5,9 @@ import board;
 import xwindow;
 
 export class GraphicsDisplay : public Observer {
+  static constexpr int cell = 50;
+  static constexpr int originX = 50;
+  static constexpr int originY = 50;
   Board *board;
   Xwindow *win;
 

@@ -5,6 +5,8 @@ import chess_types;
 import position;
 import strategy;
 import board;
+import move;
+import chess_types;
 
 using namespace std;
 

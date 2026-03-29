@@ -4,6 +4,10 @@ export module xwindow;
 import <iostream>;
 import <string>;
 
+constexpr int cell = 50;
+constexpr int originX = 50;
+constexpr int originY = 50;
+
 export class Xwindow {
   Display *d;
   Window w;

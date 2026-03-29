@@ -5,6 +5,7 @@ import player;
 import move;
 import board;
 import strategy;
+import chess_types;
 
 export class ComputerPlayer : public Player {
   std::unique_ptr<Strategy> strategy;

@@ -2,6 +2,9 @@ module level1strategy;
 import <cstdlib>;
 import strategy;
 import board;
+import move;
+import chess_types;
+
 
 Move Level1Strategy::generateMove(Board &board, Color color) {
   auto moves = board.allLegalMoves(color);

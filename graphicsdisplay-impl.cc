@@ -1,8 +1,10 @@
 module graphicsdisplay;
+import <string>;
 import observer;
 import board;
 import xwindow;
 import position;
+
 
 using namespace std;
 
