@@ -1,0 +1,219 @@
+@startuml chess
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam interfaceStyle rectangle
+left to right direction
+
+package "Types" {
+  enum Color {
+    White
+    Black
+    NoColor
+  }
+
+  enum PieceType {
+    King
+    Queen
+    Bishop
+    Rook
+    Knight
+    Pawn
+    Empty
+  }
+
+  enum MoveType {
+    Normal
+    Capture
+    Castling
+    EnPassant
+    Promotion
+    PawnTwoStep
+  }
+
+  enum CheckState {
+    None
+    WhiteInCheck
+    BlackInCheck
+    Checkmate
+    Stalemate
+  }
+
+  class Position {
+    + isValid(): bool
+    + operator==(other: Position): bool
+    + operator!=(other: Position): bool
+    + {static} fromChess(s: string): Position
+    + toChess(): string
+  }
+
+  class Move {
+    + from: Position
+    + to: Position
+    + type: MoveType
+    + promotionType: PieceType
+  }
+}
+
+package "The Board" {
+  class MoveRecord
+
+  abstract class Piece {
+    + <i>canMove(from: Position, to: Position): bool</i>
+    + <i>canCapture(from: Position, to: Position): bool</i>
+    + <i>clone(): unique_ptr<Piece></i>
+  }
+
+  class King
+  class Queen
+  class Bishop
+  class Rook
+  class Knight
+  class Pawn
+
+  interface Observer {
+    + <i>notify(): void</i>
+  }
+
+  class Subject {
+    + attach(ob: Observer*): void
+    + detach(ob: Observer*): void
+    + notifyObservers(): void
+  }
+
+  class Board {
+    + squareAttacked(p: Position, by: Color): bool
+    + inCheck(color: Color): bool
+    + validSetup(): bool
+    + pseudoLegal(from: Position, to: Position, promotionType: PieceType = Queen): bool
+    + legalMove(from: Position, to: Position, promotionType: PieceType = Queen): bool
+    + allLegalMoves(color: Color): vector<Move>
+    + hasLegalMove(color: Color): bool
+    + getCheckState(): CheckState
+    + makeMove(from: Position, to: Position, promotionType: PieceType = Queen): bool
+  }
+}
+
+package "Displays" {
+  class Xwindow {
+    + fillRectangle(x: int, y: int, width: int, height: int, colour: int = Black): void
+    + drawString(x: int, y: int, msg: string): void
+  }
+
+  class TextDisplay {
+    + <i>notify(): void</i>
+  }
+
+  class GraphicsDisplay {
+    + <i>notify(): void</i>
+  }
+}
+
+package "Players and Strategies" {
+  abstract class Player {
+    + <i>isHuman(): bool</i>
+    + <i>getMove(board: Board): Move</i>
+  }
+
+  class HumanPlayer {
+    + <i>isHuman(): bool</i>
+    + <i>getMove(board: Board): Move</i>
+  }
+
+  interface Strategy {
+    + <i>generateMove(board: Board, color: Color): Move</i>
+  }
+
+  class Level1Strategy {
+    + <i>generateMove(board: Board, color: Color): Move</i>
+  }
+
+  class Level2Strategy {
+    + <i>generateMove(board: Board, color: Color): Move</i>
+  }
+
+  class Level3Strategy {
+    + <i>generateMove(board: Board, color: Color): Move</i>
+  }
+
+  class Level4Strategy {
+    + <i>generateMove(board: Board, color: Color): Move</i>
+  }
+
+  class ComputerPlayer {
+    + <i>isHuman(): bool</i>
+    + <i>getMove(board: Board): Move</i>
+  }
+}
+
+package "Game Flow" {
+  class ChessGame {
+    + startGame(white: string, black: string): void
+    + startSetupGame(): void
+    + playHumanMove(from: Position, to: Position, promo: PieceType = Queen): bool
+    + playComputerMove(): bool
+    + resign(): void
+    + updateResult(): void
+    + printFinalScore(): void
+  }
+
+  class CommandInterpreter {
+    + run(): void
+  }
+}
+
+King --|> Piece
+Queen --|> Piece
+Bishop --|> Piece
+Rook --|> Piece
+Knight --|> Piece
+Pawn --|> Piece
+
+Board --|> Subject
+Board *-- "8x8" Piece
+Board *-- MoveRecord
+Board --> Move
+Board --> Position
+Board --> CheckState
+Board --> Color
+Board --> PieceType
+
+Move --> Position
+Move --> MoveType
+Move --> PieceType
+MoveRecord --> Move
+MoveRecord --> Position
+MoveRecord *-- Piece
+Piece --> Position
+
+Subject o-- Observer
+TextDisplay ..|> Observer
+GraphicsDisplay ..|> Observer
+TextDisplay --> Board
+GraphicsDisplay --> Board
+GraphicsDisplay --> Xwindow
+
+HumanPlayer --|> Player
+ComputerPlayer --|> Player
+Level1Strategy ..|> Strategy
+Level2Strategy ..|> Strategy
+Level3Strategy ..|> Strategy
+Level4Strategy ..|> Strategy
+Player --> Board
+Player --> Move
+Strategy --> Board
+Strategy --> Move
+Strategy --> Color
+ComputerPlayer *-- Strategy
+
+ChessGame *-- Board
+ChessGame *-- Xwindow
+ChessGame *-- TextDisplay
+ChessGame *-- GraphicsDisplay
+ChessGame *-- Player : whitePlayer
+ChessGame *-- Player : blackPlayer
+ChessGame --> Position
+ChessGame --> PieceType
+
+CommandInterpreter *-- ChessGame
+
+@enduml
